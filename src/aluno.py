@@ -13,7 +13,7 @@ class Aluno:
         Ele inicializa os atributos da instância no momento de sua criação.
         """
         """ "def"cria uma função ou um procedimento"""
-        """ "self" é uma referência à instância atual da classe, permitindo acessar atributos e métodos da classe."""
+        """ "self" é uma referência à instância atual da classe, permitindo acessar atributos e métodos da classe. Ele aponta para o primeiro valor"""
 
         """diferente entre parametro e atributo do construtor
         parametro: matricula, nome, data_nascimento, peso, altura

@@ -9,7 +9,11 @@ class No:
     """
     def __init__(self, aluno: Aluno):
         self.aluno: Aluno = aluno
+        """tipagem de dados, dizendo que a vriável é do tipo aluno
+        """
         self.proximo: Optional['No'] = None
+        """o primeiro aponta pro próximo nó, que é do tipo No, e o segundo é None, pois não há próximo nó ainda
+        """
 
 class AlunoDAO:
     """
@@ -18,6 +22,8 @@ class AlunoDAO:
     """
     
     def __init__(self):
+        """sem parametro de atributo
+        """
         # O 'head' (cabeça) é o ponteiro para o primeiro elemento da lista encadeada
         # O 'tail' (cauda) é o ponteiro para o último, otimizando a inserção para O(1)
         self.head: Optional[No] = None

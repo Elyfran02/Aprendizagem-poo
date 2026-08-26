@@ -1,0 +1,10 @@
+{
+    // Configuração para o Pylance (Análise de Código)
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    // Configuração para o Terminal Integrado do VS Code (para Debug e Execução)
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}\\src"
+    }
+}

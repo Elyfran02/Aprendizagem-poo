@@ -56,6 +56,7 @@ class AlunoDAO:
                 atual.aluno.data_nascimento = novos_dados.data_nascimento
                 atual.aluno.peso = novos_dados.peso
                 atual.aluno.altura = novos_dados.altura
+                atual.aluno.sexo = novos_dados.sexo
                 return True
             atual = atual.proximo
             

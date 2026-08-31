@@ -7,7 +7,7 @@ class Aluno:
     """
 
     # 1. Construtor
-    def __init__(self, matricula: str, nome: str, data_nascimento: date, peso: float, altura: float):
+    def __init__(self, matricula: str, nome: str, data_nascimento: date, peso: float, altura: float, sexo: str ):
         """
         O método __init__ é o construtor em Python. 
         Ele inicializa os atributos da instância no momento de sua criação.
@@ -23,6 +23,7 @@ class Aluno:
         self.data_nascimento: date = data_nascimento
         self.peso: float = peso
         self.altura: float = altura
+        self.sexo: str = sexo
         
     # 2. Destruidor
     def __del__(self):

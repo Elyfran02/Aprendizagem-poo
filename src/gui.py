@@ -62,7 +62,7 @@ class AlunoGUI(tk.Tk):
         self.entry_altura.grid(row=2, column=1, sticky=tk.W, padx=5)
 
         # Sexo
-        ttk.Label(frame_form, text="Sexo: ").grid(row=2, column=2, sticky=tk.W, padx=(10,0))
+        ttk.Label(frame_form, text="Sexo(M/F): ").grid(row=2, column=2, sticky=tk.W, padx=(10,0))
         self.entry_sexo = ttk.Entry(frame_form, width=20)
         self.entry_sexo.grid(row=2, column=3, sticky=tk.W, padx=5)
 
@@ -81,7 +81,7 @@ class AlunoGUI(tk.Tk):
         ttk.Button(frame_botoes, text="Pesquisar Matrícula", command=self.acao_pesquisar_matricula).pack(side=tk.RIGHT, padx=2)
 
     def _criar_tabela_listagem(self):
-        colunas = ("matricula", "nome", "data_nascimento", "peso", "altura", "sexo")
+        colunas = ("matricula", "nome", "data_nascimento", "peso", "altura", "sexo", "estado")
         self.tabela = ttk.Treeview(self, columns=colunas, show='headings', height=15)
         
         self.tabela.heading("matricula", text="Matrícula")
@@ -90,12 +90,14 @@ class AlunoGUI(tk.Tk):
         self.tabela.heading("peso", text="Peso (kg)")
         self.tabela.heading("altura", text="Altura (m)")
         self.tabela.heading("sexo", text="Sexo(M/F)")
+        self.tabela.heading("estado", text="Estado")
         
         self.tabela.column("matricula", width=100, anchor=tk.CENTER)
         self.tabela.column("data_nascimento", width=100, anchor=tk.CENTER)
         self.tabela.column("peso", width=80, anchor=tk.CENTER)
         self.tabela.column("altura", width=80, anchor=tk.CENTER)
         self.tabela.column("sexo", width=80, anchor=tk.CENTER)
+        self.tabela.column("estado", width=200, anchor=tk.CENTER)
             
         self.tabela.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         self.tabela.bind('<ButtonRelease-1>', self.selecionar_linha)
@@ -109,7 +111,7 @@ class AlunoGUI(tk.Tk):
         data_nasc_str = self.entry_data_nasc.get().strip()
         peso_str = self.entry_peso.get().replace(',', '.').strip()
         altura_str = self.entry_altura.get().replace(',', '.').strip()
-        sexo_str = self.entry_sexo.get().strip()
+        sexo_str = self.entry_sexo.get().strip().upper()
 
         if not all([matricula, nome, data_nasc_str, peso_str, altura_str, sexo_str]):
             raise ValueError("Todos os campos são obrigatórios e devem ser preenchidos.")
@@ -170,7 +172,8 @@ class AlunoGUI(tk.Tk):
                 data_formatada, 
                 f"{aluno.peso:.2f}", 
                 f"{aluno.altura:.2f}",
-                aluno.sexo
+                aluno.sexo,
+                aluno.estado
             ))
 
     def selecionar_linha(self, event):
@@ -185,6 +188,7 @@ class AlunoGUI(tk.Tk):
             self.entry_peso.insert(0, valores[3])
             self.entry_altura.insert(0, valores[4])
             self.entry_sexo.insert(0, valores[5])
+            self.entry_estado.config(text= valores[6])
 
     # --- MÉTODOS DE AÇÃO (INTEGRAÇÃO COM O DAO) ---
 

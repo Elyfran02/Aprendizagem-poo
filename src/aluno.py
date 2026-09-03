@@ -1,5 +1,7 @@
 from datetime import date
 
+from .aluno_endereco import Endereco_aluno
+
 
 class Aluno:
     """
@@ -7,7 +9,7 @@ class Aluno:
     """
 
     # 1. Construtor
-    def __init__(self, matricula: str, nome: str, data_nascimento: date, peso: float, altura: float, sexo: str):
+    def __init__(self, matricula: str, nome: str, data_nascimento: date, peso: float, altura: float, sexo: str, endereco: Endereco_aluno):
         """
         O método __init__ é o construtor em Python. 
         Ele inicializa os atributos da instância no momento de sua criação.
@@ -23,8 +25,9 @@ class Aluno:
         self.data_nascimento: date = data_nascimento
         self.peso: float = peso
         self.altura: float = altura
-        self.sexo: str = sexo
-        self.estado: str = self.tipo_imc()
+        self.sexo: str = sexo #adicioando
+        self.estado: str = self.tipo_imc() #adicioando
+        self.endereco: Endereco_aluno = endereco
 
     # Exemplo de um método de negócio útil usando os novos atributos
     def calcular_imc(self) -> float:
@@ -36,19 +39,23 @@ class Aluno:
         return 0.0
  
     def tipo_imc(self) -> str:
-        if self.sexo=="M":
+        """
+        Direciona o tipo do IMC baseado no sexo do aluno.(abaixo dopeso,peso noral,sobrepeso...)
+        """
+        imc = self.calcular_imc()
+        if self.sexo.upper() == "M":
                 intervalo = [
                    (0,18.5, "Abaixo do peso"),
-                   (18.6, 24.9, "peso normal"),
+                   (18.5, 24.9, "peso normal"),
                    (25.0, 29.9, "Sobrepeso"),
                    (30.0, 34.9, "Obesidade grau I"),
                    (35.0, 39.9, "Obesidade grau II"),
                    (40.0, float('inf'), "Obesidade grau III")
                    ]
                 for limite_inferior, limite_superior, classificacao in intervalo:
-                    if limite_inferior <= self.calcular_imc() <= limite_superior:
+                    if limite_inferior <= imc <= limite_superior:
                         return classificacao
-        elif self.sexo=="F":
+        elif self.sexo.upper() == "F":
                 intervalo = [
                    (0,16.99, "Muito abaixo do peso"),
                    (17.0, 18.49, "abaixo do peso"),
@@ -59,7 +66,7 @@ class Aluno:
                    (40.0, float('inf'), "Obesidade grau III")
                    ]
                 for limite_inferior, limite_superior, classificacao in intervalo:
-                    if limite_inferior <= self.calcular_imc() <= limite_superior:
+                    if limite_inferior <= imc <= limite_superior:
                         return classificacao
         
         return "Indefinido"

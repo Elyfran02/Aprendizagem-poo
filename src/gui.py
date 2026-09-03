@@ -4,6 +4,7 @@ from tkinter import messagebox, ttk
 
 from .aluno import Aluno
 from .aluno_dao import AlunoDAO
+from .aluno_endereco import Endereco_aluno
 
 
 class AlunoGUI(tk.Tk):
@@ -61,10 +62,45 @@ class AlunoGUI(tk.Tk):
         self.entry_altura = ttk.Entry(frame_form, width=20)
         self.entry_altura.grid(row=2, column=1, sticky=tk.W, padx=5)
 
-        # Sexo
+        # Sexo adicionado
         ttk.Label(frame_form, text="Sexo(M/F): ").grid(row=2, column=2, sticky=tk.W, padx=(10,0))
         self.entry_sexo = ttk.Entry(frame_form, width=20)
         self.entry_sexo.grid(row=2, column=3, sticky=tk.W, padx=5)
+
+        #endereco adicionado
+        ttk.Label(frame_form, text="Endereco:").grid(row=3, column=0, sticky=tk.W, pady=2)
+
+        #Rua
+        ttk.Label(frame_form, text="Rua: ").grid(row=4, column=0, sticky=tk.W, pady=2)
+        self.entry_rua = ttk.Entry(frame_form, width=20)
+        self.entry_rua.grid(row=4, column=1, sticky=tk.W, padx=5)
+
+        #num
+        ttk.Label(frame_form, text="Número: ").grid(row=4, column=2, sticky=tk.W, padx=(10, 0))
+        self.entry_num = ttk.Entry(frame_form, width=20)
+        self.entry_num.grid(row=4, column=3, sticky=tk.W, padx=5)
+
+        #cep
+        ttk.Label(frame_form, text="CEP: ").grid(row=5, column=0, sticky=tk.W, pady=2)
+        self.entry_cep = ttk.Entry(frame_form, width=20)
+        self.entry_cep.grid(row=5, column=1, sticky=tk.W, padx=5)
+
+        #bairro
+        ttk.Label(frame_form, text="Bairro: ").grid(row=5, column=2, sticky=tk.W, padx=(10, 0))
+        self.entry_bairro = ttk.Entry(frame_form, width=20)
+        self.entry_bairro.grid(row=5, column=3, sticky=tk.W, padx=5)
+
+        #cidade
+        ttk.Label(frame_form, text="Cidade: ").grid(row=6, column=0, sticky=tk.W, pady=2)
+        self.entry_cidade = ttk.Entry(frame_form, width=20)
+        self.entry_cidade.grid(row=6, column=1, sticky=tk.W, padx=5)
+
+        #unidade_federativa
+        ttk.Label(frame_form, text="UF: ").grid(row=6, column=2, sticky=tk.W, padx=(10, 0))
+        self.entry_unidade_federativa = ttk.Entry(frame_form, width=20)
+        self.entry_unidade_federativa.grid(row=6, column=3, sticky=tk.W, padx=5)
+
+
 
     def _criar_botoes_acao(self):
         frame_botoes = tk.Frame(self)
@@ -81,7 +117,7 @@ class AlunoGUI(tk.Tk):
         ttk.Button(frame_botoes, text="Pesquisar Matrícula", command=self.acao_pesquisar_matricula).pack(side=tk.RIGHT, padx=2)
 
     def _criar_tabela_listagem(self):
-        colunas = ("matricula", "nome", "data_nascimento", "peso", "altura", "sexo", "estado")
+        colunas = ("matricula", "nome", "data_nascimento", "peso", "altura", "sexo", "estado", "rua", "num", "cep", "bairro", "cidade", "unidade_federativa")
         self.tabela = ttk.Treeview(self, columns=colunas, show='headings', height=15)
         
         self.tabela.heading("matricula", text="Matrícula")
@@ -89,16 +125,28 @@ class AlunoGUI(tk.Tk):
         self.tabela.heading("data_nascimento", text="Data de Nascimento")
         self.tabela.heading("peso", text="Peso (kg)")
         self.tabela.heading("altura", text="Altura (m)")
-        self.tabela.heading("sexo", text="Sexo(M/F)")
-        self.tabela.heading("estado", text="Estado")
+        self.tabela.heading("sexo", text="Sexo(M/F)") #adicionado
+        self.tabela.heading("estado", text="Estado") #adicionado
+        self.tabela.heading("rua", text="Rua")
+        self.tabela.heading("num", text="Número")
+        self.tabela.heading("cep", text="Cep") #adicionado
+        self.tabela.heading("bairro", text="Bairro") #adicionado
+        self.tabela.heading("cidade", text="Cidade") #adicionado
+        self.tabela.heading("unidade_federativa", text="Unidade Federativa") #adicionado
         
         self.tabela.column("matricula", width=100, anchor=tk.CENTER)
         self.tabela.column("data_nascimento", width=100, anchor=tk.CENTER)
         self.tabela.column("peso", width=80, anchor=tk.CENTER)
         self.tabela.column("altura", width=80, anchor=tk.CENTER)
-        self.tabela.column("sexo", width=80, anchor=tk.CENTER)
-        self.tabela.column("estado", width=200, anchor=tk.CENTER)
-            
+        self.tabela.column("sexo", width=80, anchor=tk.CENTER) #adicionado
+        self.tabela.column("estado", width=200, anchor=tk.CENTER) #adicionado
+        self.tabela.column("rua", width=150, anchor=tk.CENTER)
+        self.tabela.column("num", width=70, anchor=tk.CENTER)
+        self.tabela.column("cep", width=100, anchor=tk.CENTER) #adicionado
+        self.tabela.column("bairro", width=150, anchor=tk.CENTER) #adicionado
+        self.tabela.column("cidade", width=150, anchor=tk.CENTER) #adicionado
+        self.tabela.column("unidade_federativa", width=200, anchor=tk.CENTER) #adicionado
+
         self.tabela.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         self.tabela.bind('<ButtonRelease-1>', self.selecionar_linha)
 
@@ -112,6 +160,14 @@ class AlunoGUI(tk.Tk):
         peso_str = self.entry_peso.get().replace(',', '.').strip()
         altura_str = self.entry_altura.get().replace(',', '.').strip()
         sexo_str = self.entry_sexo.get().strip().upper()
+        endereco = Endereco_aluno(
+            self.entry_rua.get().strip(),
+            self.entry_num.get().strip(),
+            self.entry_cep.get().strip(),
+            self.entry_bairro.get().strip(),
+            self.entry_cidade.get().strip(),
+            self.entry_unidade_federativa.get().strip(),
+        )
 
         if not all([matricula, nome, data_nasc_str, peso_str, altura_str, sexo_str]):
             raise ValueError("Todos os campos são obrigatórios e devem ser preenchidos.")
@@ -148,7 +204,7 @@ class AlunoGUI(tk.Tk):
             raise ValueError("Sexo inválido. Digite M ou F.")
         
             
-        return Aluno(matricula, nome, data_nascimento, peso, altura, sexo)
+        return Aluno(matricula, nome, data_nascimento, peso, altura, sexo, endereco)
 
     def limpar_campos(self):
         self.entry_matricula.delete(0, tk.END)
@@ -158,6 +214,12 @@ class AlunoGUI(tk.Tk):
         self.entry_altura.delete(0, tk.END)
         self.entry_matricula.focus()
         self.entry_sexo.delete(0, tk.END)
+        self.entry_rua.delete(0, tk.END)
+        self.entry_num.delete(0, tk.END)
+        self.entry_cep.delete(0, tk.END)
+        self.entry_bairro.delete(0, tk.END)
+        self.entry_cidade.delete(0, tk.END)
+        self.entry_unidade_federativa.delete(0, tk.END)
 
     def _atualizar_tabela(self, alunos):
         """Limpa a tabela atual e a preenche com a lista de alunos fornecida."""
@@ -173,7 +235,13 @@ class AlunoGUI(tk.Tk):
                 f"{aluno.peso:.2f}", 
                 f"{aluno.altura:.2f}",
                 aluno.sexo,
-                aluno.estado
+                aluno.estado,
+                aluno.endereco.rua,
+                aluno.endereco.num,
+                aluno.endereco.cep,
+                aluno.endereco.bairro,
+                aluno.endereco.cidade,
+                aluno.endereco.unidade_federativa,
             ))
 
     def selecionar_linha(self, event):
@@ -187,8 +255,13 @@ class AlunoGUI(tk.Tk):
             self.entry_data_nasc.insert(0, valores[2])
             self.entry_peso.insert(0, valores[3])
             self.entry_altura.insert(0, valores[4])
-            self.entry_sexo.insert(0, valores[5])
-            self.entry_estado.config(text= valores[6])
+            self.entry_sexo.insert(0, valores[5]) #adicionado
+            self.entry_rua.insert(0, valores[7])
+            self.entry_num.insert(0, valores[8])
+            self.entry_cep.insert(0, valores[9])
+            self.entry_bairro.insert(0, valores[10])
+            self.entry_cidade.insert(0, valores[11])
+            self.entry_unidade_federativa.insert(0, valores[12])
 
     # --- MÉTODOS DE AÇÃO (INTEGRAÇÃO COM O DAO) ---
 
